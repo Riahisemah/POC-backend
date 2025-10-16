@@ -9,3 +9,4 @@ beautifulsoup4==4.12.2
 requests==2.31.0
 reportlab==4.0.7
 pydantic==2.8.2
+pymysql
