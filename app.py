@@ -1,9 +1,16 @@
+import os
+from app import create_app
+from flask_cors import CORS
+
+# Création de l'application Flask
+app = create_app()
+
+# ⚡ CORS global pour toutes les routes /api/*
+CORS(app, origins=["http://localhost:8080", "http://localhost:3000", "*"], supports_credentials=True)
+
+# ✅ Point d'entrée pour Railway
 if __name__ == "__main__":
-    from app import create_app
-    import os
-
-    app = create_app()
-
-    # Utiliser le port fourni par Railway ou 5000 par défaut
+    # Railway fournit automatiquement le port
     port = int(os.environ.get("PORT", 5000))
+    # Écoute toutes les interfaces réseau
     app.run(host="0.0.0.0", port=port, debug=True)
