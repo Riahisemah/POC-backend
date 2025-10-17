@@ -14,16 +14,16 @@ def create_app():
     CORS(app, 
          resources={
              r"/api/*": {
-                 "origins": ["http://localhost:8080", "http://localhost:3000", "http://127.0.0.1:8080"],
-                 "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-                 "allow_headers": ["Content-Type", "Authorization", "X-Requested-With"],
+                 "origins": ["http://localhost:8080", "http://localhost:3000", "*"],
+                 "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS","*"],
+                 "allow_headers": ["Content-Type", "Authorization", "X-Requested-With","*"],
                  "supports_credentials": True,
                  "max_age": 3600
              }
          })
 
     # Connexion MySQL
-    app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:@localhost:3306/neoleaders_db"
+    app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:TLXOIOGAkHNgdDmlUxNQcAPMCMNFyJdV@mysql.railway.internal:3306/railway"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
