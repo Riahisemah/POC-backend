@@ -23,7 +23,7 @@ def create_app():
          })
 
     # Connexion MySQL
-    app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:TLXOIOGAkHNgdDmlUxNQcAPMCMNFyJdV@mysql.railway.internal:3306/railway"
+    app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:TLXOIOGAkHNgdDmlUxNQcAPMCMNFyJdV@switchback.proxy.rlwy.net:33388/railway"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
