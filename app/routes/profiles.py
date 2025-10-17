@@ -108,8 +108,9 @@ def get_profile(profile_id):
     if not profile:
         return jsonify({"message": "Profile not found"}), 404
     return jsonify(profile.to_dict())
-
 @profiles_bp.route('/', methods=['GET'])
+
+@profiles_bp.route('', methods=['GET'])
 def list_profiles():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 50, type=int)
