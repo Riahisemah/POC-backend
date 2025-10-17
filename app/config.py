@@ -12,7 +12,7 @@ def create_app():
 
     # ✅ Configuration CORS — simplifiée et 100 % compatible
     CORS(app, 
-         origins=["http://localhost:8080", "http://localhost:3000", "*"],
+         origins=["http://localhost:8080", "http://localhost:3000","https://pocp.up.railway.app", "*"],
          supports_credentials=True,
          allow_headers=["Content-Type", "Authorization", "X-Requested-With"],
          methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
