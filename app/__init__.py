@@ -19,7 +19,7 @@ def create_app():
     
     # Configuration
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL') or "mysql+pymysql://root:@localhost:3306/neoleaders_db"
+    app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:TLXOIOGAkHNgdDmlUxNQcAPMCMNFyJdV@switchback.proxy.rlwy.net:33388/railway"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
     
@@ -86,5 +86,22 @@ def create_app():
         response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
         response.headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
         return response
+
+    # Global error handlers to return JSON error details
+    @app.errorhandler(400)
+    def bad_request(error):
+        return jsonify({"error": "Bad Request", "message": str(error)}), 400
+
+    @app.errorhandler(404)
+    def not_found(error):
+        return jsonify({"error": "Not Found", "message": str(error)}), 404
+
+    @app.errorhandler(500)
+    def internal_server_error(error):
+        return jsonify({"error": "Internal Server Error", "message": str(error)}), 500
+
+    @app.errorhandler(Exception)
+    def handle_exception(error):
+        return jsonify({"error": "Internal Server Error", "message": str(error)}), 500
 
     return app

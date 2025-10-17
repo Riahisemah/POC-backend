@@ -18,6 +18,7 @@ def create_app():
          methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
 
     # ✅ Connexion MySQL (avec driver explicite pour éviter les erreurs)
+# backend/app/__init__.py ou là où tu configures SQLAlchemy
     app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:TLXOIOGAkHNgdDmlUxNQcAPMCMNFyJdV@switchback.proxy.rlwy.net:33388/railway"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
