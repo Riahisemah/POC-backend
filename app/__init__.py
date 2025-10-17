@@ -23,11 +23,13 @@ def create_app():
     app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
     
     # ✅ UNE SEULE CONFIGURATION CORS PROPRE
-    CORS(app, 
+    CORS(app,
          origins=["https://p-oc.netlify.app", "http://localhost:3000", "http://localhost:8080"],
          supports_credentials=True,
          methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-         allow_headers=["Content-Type", "Authorization", "X-Requested-With"])
+         allow_headers=["Content-Type", "Authorization", "X-Requested-With"],
+         expose_headers=["Content-Range", "X-Total-Count"],
+         max_age=3600)
 
     # Initialize extensions
     db.init_app(app)
