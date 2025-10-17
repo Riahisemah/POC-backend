@@ -13,7 +13,6 @@ def create_app():
     # ✅ CONFIGURATION CORS ULTRA-PERMISSIVE
     CORS(app,
          origins="*",  # ✅ Accepte toutes les origines
-         supports_credentials=True,
          allow_headers="*",  # ✅ Accepte tous les headers
          methods="*",  # ✅ Accepte toutes les méthodes
          expose_headers="*")  # ✅ Expose tous les headers
@@ -36,7 +35,6 @@ def create_app():
             response.headers.add("Access-Control-Allow-Origin", "*")
             response.headers.add("Access-Control-Allow-Headers", "*")
             response.headers.add("Access-Control-Allow-Methods", "*")
-            response.headers.add("Access-Control-Allow-Credentials", "true")
             response.headers.add("Access-Control-Max-Age", "3600")
             return response
 
@@ -44,7 +42,6 @@ def create_app():
     @app.after_request
     def after_request(response):
         response.headers.add("Access-Control-Allow-Origin", "*")
-        response.headers.add("Access-Control-Allow-Credentials", "true")
         response.headers.add("Access-Control-Allow-Headers", "*")
         response.headers.add("Access-Control-Allow-Methods", "*")
         response.headers.add("Access-Control-Expose-Headers", "*")
