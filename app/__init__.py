@@ -24,8 +24,8 @@ def create_app():
     app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
     
     # Configuration CORS COMPLÈTE
-    CORS(app, 
-         origins=["http://localhost:8080", "http://127.0.0.1:8080", "http://localhost:3000"],
+    CORS(app,
+         origins=["http://localhost:8080", "http://127.0.0.1:8080", "http://localhost:3000", "https://p-oc.netlify.app"],
          supports_credentials=True,
          methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
          allow_headers=["Content-Type", "Authorization", "X-Requested-With", "Access-Control-Allow-Origin"],
@@ -48,14 +48,14 @@ def create_app():
     from app.routes.analysis import analysis_bp
 
     # Apply CORS to each blueprint to ensure credentials are supported
-    CORS(profiles_bp, supports_credentials=True, origins=["http://localhost:8080"])
-    CORS(export_bp, supports_credentials=True, origins=["http://localhost:8080"])
-    CORS(auth_bp, supports_credentials=True, origins=["http://localhost:8080"])
-    CORS(users_bp, supports_credentials=True, origins=["http://localhost:8080"])
-    CORS(opportunities_bp, supports_credentials=True, origins=["http://localhost:8080"])
-    CORS(matches_bp, supports_credentials=True, origins=["http://localhost:8080"])
-    CORS(messages_bp, supports_credentials=True, origins=["http://localhost:8080"])
-    CORS(analysis_bp, supports_credentials=True, origins=["http://localhost:8080"])
+    CORS(profiles_bp, supports_credentials=True, origins=["http://localhost:8080", "https://p-oc.netlify.app"])
+    CORS(export_bp, supports_credentials=True, origins=["http://localhost:8080", "https://p-oc.netlify.app"])
+    CORS(auth_bp, supports_credentials=True, origins=["http://localhost:8080", "https://p-oc.netlify.app"])
+    CORS(users_bp, supports_credentials=True, origins=["http://localhost:8080", "https://p-oc.netlify.app"])
+    CORS(opportunities_bp, supports_credentials=True, origins=["http://localhost:8080", "https://p-oc.netlify.app"])
+    CORS(matches_bp, supports_credentials=True, origins=["http://localhost:8080", "https://p-oc.netlify.app"])
+    CORS(messages_bp, supports_credentials=True, origins=["http://localhost:8080", "https://p-oc.netlify.app"])
+    CORS(analysis_bp, supports_credentials=True, origins=["http://localhost:8080", "https://p-oc.netlify.app"])
 
     app.register_blueprint(profiles_bp, url_prefix='/api/profiles')
     app.register_blueprint(export_bp, url_prefix='/api/export')
@@ -72,7 +72,9 @@ def create_app():
         from flask import request
         if request.method == "OPTIONS":
             response = jsonify({"status": "success"})
-            response.headers.add("Access-Control-Allow-Origin", "http://localhost:8080")
+            origin = request.headers.get('Origin')
+            if origin in ["http://localhost:8080", "https://p-oc.netlify.app"]:
+                response.headers.add("Access-Control-Allow-Origin", origin)
             response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
             response.headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
             response.headers.add("Access-Control-Allow-Credentials", "true")
@@ -81,7 +83,9 @@ def create_app():
 
     @app.after_request
     def after_request(response):
-        response.headers.add("Access-Control-Allow-Origin", "http://localhost:8080")
+        origin = request.headers.get('Origin')
+        if origin in ["http://localhost:8080", "https://p-oc.netlify.app"]:
+            response.headers.add("Access-Control-Allow-Origin", origin)
         response.headers.add("Access-Control-Allow-Credentials", "true")
         response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
         response.headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")

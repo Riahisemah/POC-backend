@@ -6,7 +6,7 @@ from flask_cors import CORS
 app = create_app()
 
 # ⚡ CORS global pour toutes les routes /api/*
-CORS(app, origins=["http://localhost:8080", "http://localhost:3000", "*"], supports_credentials=True)
+CORS(app, origins=["http://localhost:8080", "http://localhost:3000", "https://p-oc.netlify.app", "*"], supports_credentials=True)
 
 # ✅ Point d'entrée pour Railway
 if __name__ == "__main__":

@@ -11,8 +11,8 @@ def create_app():
     app = Flask(__name__)
 
     # ✅ Configuration CORS — simplifiée et 100 % compatible
-    CORS(app, 
-         origins=["http://localhost:8080", "http://localhost:3000","https://pocp.up.railway.app", "*"],
+    CORS(app,
+         origins=["http://localhost:8080", "http://localhost:3000","https://pocp.up.railway.app", "https://p-oc.netlify.app", "*"],
          supports_credentials=True,
          allow_headers=["Content-Type", "Authorization", "X-Requested-With"],
          methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
