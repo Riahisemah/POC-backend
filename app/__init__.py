@@ -22,16 +22,12 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
     
-    # ✅ CONFIGURATION CORS LA PLUS PERMISSIVE
+    # ✅ UNE SEULE CONFIGURATION CORS PROPRE
     CORS(app, 
-         resources={r"/api/*": {
-             "origins": "*",  # ✅ Accepte toutes les origines
-             "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"],
-             "allow_headers": ["*"],  # ✅ Accepte tous les headers
-             "expose_headers": ["*"],  # ✅ Expose tous les headers
-             "supports_credentials": True,  # ✅ Autorise les credentials
-             "max_age": 3600
-         }})
+         origins=["https://p-oc.netlify.app", "http://localhost:3000", "http://localhost:8080"],
+         supports_credentials=True,
+         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+         allow_headers=["Content-Type", "Authorization", "X-Requested-With"])
 
     # Initialize extensions
     db.init_app(app)
@@ -48,19 +44,9 @@ def create_app():
     from app.routes.messages import messages_bp
     from app.routes.analysis import analysis_bp
 
-    # ✅ APPLICATION CORS PERMISSIVE À CHAQUE BLUEPRINT
-    blueprints = [
-        profiles_bp, export_bp, auth_bp, users_bp, 
-        opportunities_bp, matches_bp, messages_bp, analysis_bp
-    ]
-    
-    for bp in blueprints:
-        CORS(bp, 
-             origins="*",
-             methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"],
-             allow_headers=["*"],
-             expose_headers=["*"],
-             supports_credentials=True)
+    # ❌ SUPPRIMEZ les CORS sur chaque blueprint
+    # ❌ SUPPRIMEZ @app.before_request
+    # ❌ SUPPRIMEZ @app.after_request
 
     app.register_blueprint(profiles_bp, url_prefix='/api/profiles')
     app.register_blueprint(export_bp, url_prefix='/api/export')
@@ -70,28 +56,6 @@ def create_app():
     app.register_blueprint(matches_bp, url_prefix='/api/matches')
     app.register_blueprint(messages_bp, url_prefix='/api/messages')
     app.register_blueprint(analysis_bp, url_prefix='/api/analysis')
-    
-    # ✅ GESTION OPTIONS SIMPLIFIÉE ET PERMISSIVE
-    @app.before_request
-    def handle_preflight():
-        if request.method == "OPTIONS":
-            response = jsonify({"status": "success"})
-            response.headers.add("Access-Control-Allow-Origin", "*")
-            response.headers.add("Access-Control-Allow-Headers", "*")
-            response.headers.add("Access-Control-Allow-Methods", "*")
-            response.headers.add("Access-Control-Allow-Credentials", "true")
-            response.headers.add("Access-Control-Max-Age", "3600")
-            return response
-
-    # ✅ HEADERS CORS POUR TOUTES LES RÉPONSES
-    @app.after_request
-    def after_request(response):
-        response.headers.add("Access-Control-Allow-Origin", "*")
-        response.headers.add("Access-Control-Allow-Credentials", "true")
-        response.headers.add("Access-Control-Allow-Headers", "*")
-        response.headers.add("Access-Control-Allow-Methods", "*")
-        response.headers.add("Access-Control-Expose-Headers", "*")
-        return response
 
     # Global error handlers to return JSON error details
     @app.errorhandler(400)
