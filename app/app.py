@@ -1,4 +1,4 @@
-import sys 
+import sys
 import os
 
 # Add parent directory to path
@@ -8,5 +8,9 @@ from app import create_app
 
 app = create_app()
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    # ⚙️ Utilise le port fourni par Railway (par défaut 5000)
+    port = int(os.environ.get("PORT", 5000))
+    
+    # ✅ Écoute sur toutes les interfaces réseau
+    app.run(host="0.0.0.0", port=port, debug=True)
