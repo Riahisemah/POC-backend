@@ -102,7 +102,7 @@ def get_opportunity(opp_id):
     if not opp:
         return jsonify({"message": "Opportunity not found"}), 404
     return jsonify(opp.to_dict())
-
+@opportunities_bp.route('/', methods=['GET'])
 @opportunities_bp.route('', methods=['GET'])
 def list_opportunities():
     page = request.args.get('page', 1, type=int)

@@ -1,7 +1,7 @@
 import os
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask import Flask
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 db = SQLAlchemy()
@@ -10,15 +10,15 @@ migrate = Migrate()
 def create_app():
     app = Flask(__name__)
 
-    # ✅ Configuration CORS — simplifiée et 100 % compatible
+    # ✅ CONFIGURATION CORS ULTRA-PERMISSIVE
     CORS(app,
-         origins=["http://localhost:8080", "http://localhost:3000","https://pocp.up.railway.app", "https://p-oc.netlify.app", "*"],
+         origins="*",  # ✅ Accepte toutes les origines
          supports_credentials=True,
-         allow_headers=["Content-Type", "Authorization", "X-Requested-With"],
-         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
+         allow_headers="*",  # ✅ Accepte tous les headers
+         methods="*",  # ✅ Accepte toutes les méthodes
+         expose_headers="*")  # ✅ Expose tous les headers
 
-    # ✅ Connexion MySQL (avec driver explicite pour éviter les erreurs)
-# backend/app/__init__.py ou là où tu configures SQLAlchemy
+    # ✅ Connexion MySQL
     app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:TLXOIOGAkHNgdDmlUxNQcAPMCMNFyJdV@switchback.proxy.rlwy.net:33388/railway"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -28,9 +28,36 @@ def create_app():
     # ⚠️ Importer les modèles ici pour que Flask-Migrate les détecte
     from app import models
 
-    # Exemple de route de test pour valider CORS
-    @app.route("/api/test", methods=["GET", "OPTIONS"])
+    # ✅ GESTION OPTIONS POUR TOUTES LES ROUTES
+    @app.before_request
+    def handle_preflight():
+        if request.method == "OPTIONS":
+            response = jsonify({"status": "success", "message": "CORS Preflight OK"})
+            response.headers.add("Access-Control-Allow-Origin", "*")
+            response.headers.add("Access-Control-Allow-Headers", "*")
+            response.headers.add("Access-Control-Allow-Methods", "*")
+            response.headers.add("Access-Control-Allow-Credentials", "true")
+            response.headers.add("Access-Control-Max-Age", "3600")
+            return response
+
+    # ✅ HEADERS CORS POUR TOUTES LES RÉPONSES
+    @app.after_request
+    def after_request(response):
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add("Access-Control-Allow-Credentials", "true")
+        response.headers.add("Access-Control-Allow-Headers", "*")
+        response.headers.add("Access-Control-Allow-Methods", "*")
+        response.headers.add("Access-Control-Expose-Headers", "*")
+        return response
+
+    # Route de test pour valider CORS
+    @app.route("/api/test", methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"])
     def test():
-        return {"message": "CORS OK ✅"}
+        return {"message": "CORS OK ✅ - Tout est autorisé!"}
+
+    # Route de test avec credentials
+    @app.route("/api/test-auth", methods=["GET", "OPTIONS"])
+    def test_auth():
+        return {"message": "CORS avec auth OK ✅", "user": "authenticated"}
 
     return app
