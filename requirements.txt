@@ -6,6 +6,6 @@ python-dotenv==1.0.0
 Flask-CORS==4.0.0
 requests==2.31.0
 pydantic==2.8.2
-pymysql
+pymysql==1.1.0
 pydantic[email]
-numpy==1.24.3
+numpy==1.26.4  # Use newer version with pre-compiled wheels
