@@ -8,6 +8,8 @@ from app import db
 from pydantic import BaseModel, ValidationError
 from typing import Optional
 import re
+import jwt
+import os
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -160,6 +162,71 @@ def delete_profile(profile_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": str(e)}), 500
+
+@profiles_bp.route('/current', methods=['GET'])
+def get_current_user_profile():
+    """Get current user's profile."""
+    try:
+        # Try to get user_id from JWT token if available
+        user_id = None
+        try:
+            from flask_jwt_extended import get_jwt_identity
+
+        except:
+            # If no JWT, try to get from Authorization header
+            auth_header = request.headers.get('Authorization')
+            if auth_header and auth_header.startswith('Bearer '):
+                token = auth_header.replace('Bearer ', '')
+                try:
+                    # Decode JWT manually using PyJWT
+                    jwt_secret = os.getenv('JWT_SECRET_KEY', 'my-super-secret-jwt-key-12345')
+                    decoded = jwt.decode(token, jwt_secret, algorithms=['HS256'])
+                    user_id = decoded.get('sub')
+                except:
+                    pass
+        if not user_id:
+            return jsonify({"error": "Authentication required"}), 401
+
+        from app.models.User import User
+        profile = Profile.query.filter_by(user_id=user_id).first()
+        if not profile:
+            # If no profile exists, return user data as profile
+            user = User.query.get(user_id)
+            if not user:
+                return jsonify({"message": "User not found"}), 404
+            # Create a profile-like response from user data
+            user_profile = {
+                "id": None,  # No profile ID yet
+                "user_id": user.id,
+                "title": None,
+                "experience_years": None,
+                "sector": None,
+                "skills": None,
+                "availability": None,
+                "location": None,
+                "data": {
+                    "personalInfo": {
+                        "title": None,
+                        "name": f"{user.first_name} {user.last_name}",
+                        "email": user.email,
+                        "phone": user.phone,
+                        "location": None,
+                        "linkedin": user.linkedin_url
+                    },
+                    "summary": "",
+                    "experience": [],
+                    "education": [],
+                    "skills": [],
+                    "languages": [],
+                    "certifications": []
+                },
+                "updated_at": user.created_at.isoformat() if user.created_at else None,
+            }
+            return jsonify(user_profile)
+        return jsonify(profile.to_dict())
+    except Exception as e:
+        logger.error(f"Error getting current user profile: {str(e)}")
+        return jsonify({"error": "Failed to get profile"}), 500
 
 @profiles_bp.route('/save', methods=['POST'])
 def save_profile():

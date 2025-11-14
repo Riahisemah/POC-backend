@@ -34,6 +34,7 @@ class Opportunity(db.Model):
 
     def to_dict(self):
         return {
+            "id": self.id,
             "opportunityId": self.opportunityId,
             "title": self.title,
             "description": self.description,
@@ -58,5 +59,5 @@ class Opportunity(db.Model):
             "createdBy": self.created_by,
             "createdAt": self.created_at.isoformat() if self.created_at else None,
             "expiryDate": self.expiry_date.isoformat() if self.expiry_date else None,
-   
+
         }

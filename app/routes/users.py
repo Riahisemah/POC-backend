@@ -111,3 +111,66 @@ def delete_user(user_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": str(e)}), 500
+
+@users_bp.route('/current', methods=['GET'])
+@jwt_required()
+def get_current_user():
+    """Get current authenticated user."""
+    try:
+        user_id = get_jwt_identity()
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({"message": "User not found"}), 404
+        return jsonify(user.to_dict())
+    except Exception as e:
+        return jsonify({"message": str(e)}), 500
+
+@users_bp.route('/current', methods=['PUT'])
+@jwt_required()
+def update_current_user():
+    """Update current authenticated user."""
+    try:
+        user_id = get_jwt_identity()
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({"message": "User not found"}), 404
+
+        data = request.get_json()
+        user_data = UserUpdateSchema(**data)
+        for key, value in user_data.dict(exclude_unset=True).items():
+            setattr(user, key, value)
+        db.session.commit()
+        return jsonify(user.to_dict())
+    except ValidationError as e:
+        return jsonify({"message": e.errors()}), 400
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"message": str(e)}), 500
+
+@users_bp.route('/change-password', methods=['POST'])
+@jwt_required()
+def change_password():
+    """Change password for current authenticated user."""
+    try:
+        user_id = get_jwt_identity()
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({"message": "User not found"}), 404
+
+        data = request.get_json()
+        current_password = data.get('current_password')
+        new_password = data.get('new_password')
+
+        if not current_password or not new_password:
+            return jsonify({"message": "Current and new password required"}), 400
+
+        from werkzeug.security import check_password_hash, generate_password_hash
+        if not check_password_hash(user.password, current_password):
+            return jsonify({"message": "Current password incorrect"}), 400
+
+        user.password = generate_password_hash(new_password)
+        db.session.commit()
+        return jsonify({"message": "Password changed successfully"})
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"message": str(e)}), 500

@@ -13,7 +13,6 @@ class Profile(db.Model):
     location = db.Column(db.String(150))
     data = db.Column(db.JSON)  # Store full profile data as JSON
     updated_at = db.Column(db.DateTime, default=datetime.utcnow)
-
     user = db.relationship("User", back_populates="profiles")
     matches = db.relationship("Match", back_populates="profile", lazy=True)
 
