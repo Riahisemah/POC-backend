@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity, get_jwt
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.models.User import User
-from factory import db
+from app.factory import db
 
 from pydantic import BaseModel, EmailStr
 from datetime import datetime

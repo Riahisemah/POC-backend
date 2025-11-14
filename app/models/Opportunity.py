@@ -1,4 +1,4 @@
-from factory import db
+from app.factory import db
 
 from datetime import datetime
 

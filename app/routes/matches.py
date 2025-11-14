@@ -4,7 +4,7 @@ from app.models.Match import Match
 from app.models.Profile import Profile
 from app.models.Opportunity import Opportunity
 from app.services.matching_service import MatchingService
-from factory import db
+from app.factory import db
 
 from pydantic import BaseModel, ValidationError
 from typing import Optional

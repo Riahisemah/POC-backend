@@ -1,5 +1,5 @@
 
-from factory import db
+from app.factory import db
 
 from app.models.Profile import Profile
 from app.models.Opportunity import Opportunity

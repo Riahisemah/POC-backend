@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required
 from app.models.Opportunity import Opportunity
-from factory import db
+from app.factory import db
 
 from pydantic import BaseModel, ValidationError
 from typing import Optional, List
