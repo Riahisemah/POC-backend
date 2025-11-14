@@ -26,7 +26,7 @@ def create_app():
     
     # ✅ UNE SEULE CONFIGURATION CORS PROPRE
     CORS(app,
-         origins=["https://p-oc.netlify.app", "http://localhost:3000", "http://localhost:8080", "http://127.0.0.1:8080"],
+         origins=["https://p-oc.netlify.app", "http://localhost:3000", "http://localhost:8080", "http://127.0.0.1:8080", "*"],
          methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
          allow_headers=["Content-Type", "Authorization", "X-Requested-With", "X-User-ID"],
          expose_headers=["Content-Range", "X-Total-Count"],
