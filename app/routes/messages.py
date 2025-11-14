@@ -29,7 +29,7 @@ class MessageUpdateSchema(BaseModel):
     read_status: Optional[bool] = None
 
 # Constantes
-N8N_URL = "https://n8n-b2yn.onrender.com/webhook-test/e5175fdd-fd1d-4257-ba26-865a9233c7fe"
+N8N_URL = "https://n8n-b2yn.onrender.com/webhook/e5175fdd-fd1d-4257-ba26-865a9233c7fe"
 REQUEST_TIMEOUT = 300
 
 # Utilitaires
