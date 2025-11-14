@@ -2,7 +2,7 @@ import os
 from factory import create_app
 from flask_cors import CORS
 import sys
-sys.path.insert(0, os.p ath.abspath(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
 app = create_app()
 
