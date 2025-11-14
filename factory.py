@@ -44,15 +44,15 @@ def create_app():
     jwt.init_app(app)
 
     # Register blueprints (IMPORTANT: NO RELATIVE IMPORTS)
-    from app.routes.profiles import profiles_bp
-    from app.routes.export import export_bp
-    from app.routes.auth import auth_bp
-    from app.routes.users import users_bp
-    from app.routes.opportunities import opportunities_bp
-    from app.routes.matches import matches_bp
-    from app.routes.messages import messages_bp
-    from app.routes.analysis import analysis_bp
-    from app.routes.community import community_bp
+    from routes.profiles import profiles_bp
+    from routes.export import export_bp
+    from routes.auth import auth_bp
+    from routes.users import users_bp
+    from routes.opportunities import opportunities_bp
+    from routes.matches import matches_bp
+    from routes.messages import messages_bp
+    from routes.analysis import analysis_bp
+    from routes.community import community_bp
 
     app.register_blueprint(profiles_bp, url_prefix='/api/profiles')
     app.register_blueprint(export_bp, url_prefix='/api/export')
