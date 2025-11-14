@@ -6,6 +6,20 @@ import re
 from copy import copy
 import time
 
+# Optional heavy dependencies - only import if available
+try:
+    import requests
+    REQUESTS_AVAILABLE = True
+except ImportError:
+    REQUESTS_AVAILABLE = False
+
+try:
+    from bs4 import BeautifulSoup
+    BS4_AVAILABLE = True
+except ImportError:
+    BS4_AVAILABLE = False
+    BeautifulSoup = None
+
 logger = logging.getLogger(__name__)
 
 PROFILE_STRUCTURE = {

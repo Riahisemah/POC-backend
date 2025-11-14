@@ -1,3 +1,4 @@
+
 from app import db
 from app.models.Profile import Profile
 from app.models.Opportunity import Opportunity
@@ -7,9 +8,21 @@ import re
 import difflib
 import json
 import numpy as np
-from sklearn.metrics.pairwise import cosine_similarity
-import spacy
 from datetime import datetime
+
+# Optional heavy dependencies - only import if available
+try:
+    SKLEARN_AVAILABLE = True
+except ImportError:
+    SKLEARN_AVAILABLE = False
+
+try:
+    import spacy
+    SPACY_AVAILABLE = True
+except ImportError:
+    SPACY_AVAILABLE = False
+    spacy = None
+    from sklearn.metrics.pairwise import cosine_similarity
 import logging
 from collections import Counter
 from pathlib import Path

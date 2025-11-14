@@ -1,12 +1,25 @@
 import base64
 from collections import defaultdict
 import io
-import pdfplumber
 import re
 from datetime import datetime
-import spacy
-from spacy.matcher import PhraseMatcher
 from typing import List, Dict, Any, Optional, Tuple
+
+# Optional heavy dependencies - only import if available
+try:
+    import pdfplumber
+    PDFPLUMBER_AVAILABLE = True
+except ImportError:
+    PDFPLUMBER_AVAILABLE = False
+
+try:
+    import spacy
+    from spacy.matcher import PhraseMatcher
+    SPACY_AVAILABLE = True
+except ImportError:
+    SPACY_AVAILABLE = False
+    spacy = None
+    PhraseMatcher = None
 
 class PDFExtractor:
     def __init__(self):
@@ -69,9 +82,12 @@ class PDFExtractor:
 
     def extract_pdf_info(self, pdf_base64: str) -> Dict[str, Any]:
         """Extraction principale des informations PDF"""
+        if not PDFPLUMBER_AVAILABLE:
+            return {"error": "PDF extraction not available - pdfplumber not installed"}
+
         try:
             pdf_bytes = base64.b64decode(pdf_base64)
-            
+
             with io.BytesIO(pdf_bytes) as f:
                 with pdfplumber.open(f) as pdf:
                     full_content = []
@@ -83,7 +99,7 @@ class PDFExtractor:
                             'page_width': page.width,
                             'page_height': page.height
                         })
-            
+
             return self._extract_structured_data(full_content)
         except Exception as e:
             return {"error": f"Erreur lors de l'extraction PDF: {str(e)}"}

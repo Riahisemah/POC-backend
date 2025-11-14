@@ -1,5 +1,13 @@
 from datetime import datetime
 
+# Optional heavy dependencies - only import if available
+try:
+    import numpy as np
+    NUMPY_AVAILABLE = True
+except ImportError:
+    NUMPY_AVAILABLE = False
+    np = None
+
 class ProfileAnalyzer:
     def __init__(self):
         self.skill_weights = {
