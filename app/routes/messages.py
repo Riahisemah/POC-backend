@@ -3,7 +3,8 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.models.Message import Message
 from app.models.User import User
 from app.models.LinkedInLead import LinkedInLead
-from app import db
+from factory import db
+
 from pydantic import BaseModel, ValidationError
 from typing import Optional
 from sqlalchemy import or_, and_

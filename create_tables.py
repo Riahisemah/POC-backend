@@ -3,6 +3,7 @@ from app import create_app
 app = create_app()
 
 with app.app_context():
-    from app import db
+    from factory import db
+
     db.create_all()
     print("Tables created successfully.")

@@ -5,7 +5,8 @@ from app.models.Profile import Profile
 from app.models.Opportunity import Opportunity
 from app.models.Match import Match
 from app.models.Message import Message
-from app import db
+from factory import db
+
 from sqlalchemy import func, case
 from datetime import datetime, timedelta
 

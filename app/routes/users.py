@@ -1,7 +1,8 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required
 from app.models.User import User
-from app import db
+from factory import db
+
 from pydantic import BaseModel, EmailStr, ValidationError
 from typing import Optional
 

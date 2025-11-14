@@ -1,5 +1,6 @@
 
-from app import db
+from factory import db
+
 from app.models.Profile import Profile
 from app.models.Opportunity import Opportunity
 from app.models.Match import Match

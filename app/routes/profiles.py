@@ -4,7 +4,8 @@ from flask_jwt_extended import jwt_required
 from app.services.pdf_extractor import PDFExtractor
 from app.services.linkedin_extractor import extract_linkedin_scrapingbee
 from app.models.Profile import Profile
-from app import db
+from factory import db
+
 from pydantic import BaseModel, ValidationError
 from typing import Optional
 import re
