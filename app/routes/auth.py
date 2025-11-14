@@ -44,8 +44,10 @@ def register():
         db.session.rollback()
         return jsonify({"message": str(e)}), 400
 
-@auth_bp.route('/login', methods=['POST'])
+@auth_bp.route('/login', methods=['POST', 'OPTIONS'])
 def login():
+    if request.method == 'OPTIONS':
+        return '', 200
     try:
         data = request.get_json()
         schema = LoginSchema(**data)

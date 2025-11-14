@@ -23,16 +23,18 @@ def create_app():
     app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 
     # Global CORS
-    CORS(app, origins=[
-        "https://p-oc.netlify.app",
-        "http://localhost:3000",
-        "http://localhost:8080",
-        "http://127.0.0.1:8080",
-        "*"
-    ], methods=["GET","POST","PUT","DELETE","OPTIONS","PATCH"],
-       allow_headers=["Content-Type","Authorization","X-Requested-With","X-User-ID"],
-       expose_headers=["Content-Range","X-Total-Count"],
-       max_age=3600)
+    CORS(app,
+        origins=[
+             "https://p-oc.netlify.app",
+             "http://localhost:3000",
+             "http://localhost:8080"
+         ],
+         supports_credentials=True,
+         methods=["GET","POST","PUT","DELETE","OPTIONS","PATCH"],
+         allow_headers=["Content-Type","Authorization","X-Requested-With","X-User-ID"],
+         expose_headers=["Content-Range","X-Total-Count"],
+         max_age=3600)
+
 
     # Init extensions
     db.init_app(app)
