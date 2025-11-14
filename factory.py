@@ -43,15 +43,15 @@ def create_app():
     jwt.init_app(app)
 
     # Register blueprints
-    from app.routes.profiles import profiles_bp
-    from app.routes.export import export_bp
-    from app.routes.auth import auth_bp
-    from app.routes.users import users_bp
-    from app.routes.opportunities import opportunities_bp
-    from app.routes.matches import matches_bp
-    from app.routes.messages import messages_bp
-    from app.routes.analysis import analysis_bp
-    from app.routes.community import community_bp
+    from .app.routes.profiles import profiles_bp
+    from .app.routes.export import export_bp
+    from .app.routes.auth import auth_bp
+    from .app.routes.users import users_bp
+    from .app.routes.opportunities import opportunities_bp
+    from .app.routes.matches import matches_bp
+    from .app.routes.messages import messages_bp
+    from .app.routes.analysis import analysis_bp
+    from .app.routes.community import community_bp
 
     # ❌ SUPPRIMEZ les CORS sur chaque blueprint
     # ❌ SUPPRIMEZ @app.before_request
