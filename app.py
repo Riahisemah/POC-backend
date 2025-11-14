@@ -1,6 +1,6 @@
-from factory import create_app
-from flask_cors import CORS
 import os
+from app.factory import create_app
+from flask_cors import CORS
 
 app = create_app()
 

@@ -23,36 +23,32 @@ def create_app():
     app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 
     # Global CORS
-    CORS(
-        app,
-        origins=[
-            "https://p-oc.netlify.app",
-            "http://localhost:3000",
-            "http://localhost:8080",
-            "http://127.0.0.1:8080",
-            "*"
-        ],
-        methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-        allow_headers=["Content-Type", "Authorization", "X-Requested-With", "X-User-ID"],
-        expose_headers=["Content-Range", "X-Total-Count"],
-        max_age=3600
-    )
+    CORS(app, origins=[
+        "https://p-oc.netlify.app",
+        "http://localhost:3000",
+        "http://localhost:8080",
+        "http://127.0.0.1:8080",
+        "*"
+    ], methods=["GET","POST","PUT","DELETE","OPTIONS","PATCH"],
+       allow_headers=["Content-Type","Authorization","X-Requested-With","X-User-ID"],
+       expose_headers=["Content-Range","X-Total-Count"],
+       max_age=3600)
 
     # Init extensions
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
 
-    # Register blueprints (IMPORTANT: NO RELATIVE IMPORTS)
-    from routes.profiles import profiles_bp
-    from routes.export import export_bp
-    from routes.auth import auth_bp
-    from routes.users import users_bp
-    from routes.opportunities import opportunities_bp
-    from routes.matches import matches_bp
-    from routes.messages import messages_bp
-    from routes.analysis import analysis_bp
-    from routes.community import community_bp
+    # Register blueprints
+    from app.routes.profiles import profiles_bp
+    from app.routes.export import export_bp
+    from app.routes.auth import auth_bp
+    from app.routes.users import users_bp
+    from app.routes.opportunities import opportunities_bp
+    from app.routes.matches import matches_bp
+    from app.routes.messages import messages_bp
+    from app.routes.analysis import analysis_bp
+    from app.routes.community import community_bp
 
     app.register_blueprint(profiles_bp, url_prefix='/api/profiles')
     app.register_blueprint(export_bp, url_prefix='/api/export')
